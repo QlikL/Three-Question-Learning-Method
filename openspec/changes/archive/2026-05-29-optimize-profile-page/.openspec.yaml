@@ -1,0 +1,20 @@
+change:
+  name: optimize-profile-page
+  description: 优化个人中心界面 - 课程评分逻辑、能力雷达图、学科柱状图
+  schema: standard
+  status: active
+  artifacts:
+    - id: proposal
+      type: file
+      path: proposal.md
+      status: done
+    - id: design
+      type: file
+      path: design.md
+      status: done
+      depends_on: [proposal]
+    - id: tasks
+      type: file
+      path: tasks.md
+      status: done
+      depends_on: [design]

@@ -1,0 +1,20 @@
+change:
+  name: course-import-export
+  description: 课程导入导出功能
+  schema: standard
+  status: active
+  artifacts:
+    - id: proposal
+      type: file
+      path: proposal.md
+      status: done
+    - id: design
+      type: file
+      path: design.md
+      status: done
+      depends_on: [proposal]
+    - id: tasks
+      type: file
+      path: tasks.md
+      status: done
+      depends_on: [design]

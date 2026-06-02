@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据管理工具</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        h3 {
+            color: #555;
+            margin: 20px 0 10px;
+        }
+        .info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .section {
+            background: #f9fafb;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #e5e7eb;
+        }
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background: #1d4ed8;
+        }
+        button.danger {
+            background: #dc2626;
+        }
+        button.danger:hover {
+            background: #b91c1c;
+        }
+        button.warning {
+            background: #f59e0b;
+        }
+        button.warning:hover {
+            background: #d97706;
+        }
+        #output {
+            background: #1f2937;
+            color: #10b981;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 13px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 数据管理工具</h1>
+        
+        <div class="info">
+            <strong>说明：</strong>此工具用于管理应用的本地数据，包括课程数据、AI配置、主题设置等。
+        </div>
+
+        <h3>📋 课程管理</h3>
+        <button onclick="listCourses()">列出所有课程</button>
+        <button class="danger" onclick="clearAllGraphs()">️ 清除所有知识图谱</button>
+        <button class="danger" onclick="deleteOldCourse()">🗑️ 删除所有课程</button>
+
+        <h3>⚙️ 设置管理</h3>
+        <button onclick="showSettings()">查看当前设置</button>
+        <button class="warning" onclick="clearSettings()">重置所有设置</button>
+        <button onclick="testAI()"> 测试AI连接</button>
+
+        <h3>⚠️ 危险操作</h3>
+        <button class="danger" onclick="clearAllData()">清除所有数据</button>
+
+        <div id="output">等待操作...</div>
+    </div>
+
+    <script src="js/store.js"></script>
+    <script src="js/services/aiService.js"></script>
+    <script>
+        function log(msg) {
+            const output = document.getElementById('output');
+            output.textContent += msg + '\n';
+            output.scrollTop = output.scrollHeight;
+        }
+
+        async function listCourses() {
+            const output = document.getElementById('output');
+            output.textContent = '正在加载课程列表...\n';
+            
+            try {
+                const courses = await Store.getAllCourses();
+                output.textContent = `找到 ${courses.length} 个课程：\n\n`;
+                
+                courses.forEach((course, index) => {
+                    output.textContent += `${index + 1}. ${course.title || course.query || '未知标题'}\n`;
+                    output.textContent += `   ID: ${course.id}\n`;
+                    output.textContent += `   状态: ${course.status}\n`;
+                    output.textContent += `   创建时间: ${new Date(course.createdAt).toLocaleString()}\n`;
+                    output.textContent += `---\n`;
+                });
+            } catch (error) {
+                output.textContent = '错误: ' + error.message;
+            }
+        }
+
+        async function clearAllGraphs() {
+            const output = document.getElementById('output');
+            output.textContent = '正在清除所有知识图谱...\n';
+            
+            if (!confirm('确定要清除所有课程的知识图谱缓存吗？这将使AI重新生成。')) {
+                output.textContent = '操作已取消。';
+                return;
+            }
+            
+            try {
+                const db = await Store.openDB();
+                const tx = db.transaction('knowledgeGraphs', 'readwrite');
+                tx.objectStore('knowledgeGraphs').clear();
+                
+                output.textContent = '✅ 成功清除所有知识图谱！\n请刷新网页，重新进入课程查看效果。';
+            } catch (error) {
+                output.textContent = '错误: ' + error.message;
+            }
+        }
+
+        function showSettings() {
+            const output = document.getElementById('output');
+            try {
+                const settings = JSON.parse(localStorage.getItem('app_settings') || '{}');
+                const theme = localStorage.getItem('app_theme') || 'light';
+                
+                output.textContent = '当前设置：\n\n';
+                output.textContent += `主题: ${theme}\n`;
+                output.textContent += `服务商: ${settings.aiProvider || '未配置'}\n`;
+                output.textContent += `模型: ${settings.aiModel || '未配置'}\n`;
+                output.textContent += `API Key: ${settings.aiApiKey ? '已配置（' + settings.aiApiKey.length + '字符）' : '未配置'}\n`;
+                output.textContent += `自定义端点: ${settings.aiEndpoint || '无'}\n`;
+                output.textContent += `测验难度: ${settings.quizDifficulty || 'medium'}\n`;
+                output.textContent += `已保存模型: ${(settings.savedModels || []).length} 个\n`;
+                
+                if (settings.savedModels && settings.savedModels.length > 0) {
+                    output.textContent += '\n已保存的模型列表：\n';
+                    settings.savedModels.forEach((m, i) => {
+                        output.textContent += `  ${i + 1}. ${m.providerName} - ${m.label}\n`;
+                    });
+                }
+            } catch (error) {
+                output.textContent = '错误: ' + error.message;
+            }
+        }
+
+        function clearSettings() {
+            const output = document.getElementById('output');
+            
+            if (!confirm('确定要重置所有设置吗？包括AI配置、主题、学习偏好等。')) {
+                output.textContent = '操作已取消。';
+                return;
+            }
+            
+            try {
+                localStorage.removeItem('app_settings');
+                localStorage.removeItem('app_theme');
+                output.textContent = '✅ 设置已重置！\n请刷新网页，重新配置。';
+            } catch (error) {
+                output.textContent = '错误: ' + error.message;
+            }
+        }
+
+        async function clearAllData() {
+            const output = document.getElementById('output');
+            output.textContent = '⚠️ 警告：此操作将删除所有数据！\n\n';
+            
+            if (!confirm('⚠️ 确定要删除所有数据吗？此操作不可恢复！')) {
+                output.textContent += '操作已取消。';
+                return;
+            }
+            
+            if (!confirm('再次确认：真的要删除所有数据吗？')) {
+                output.textContent += '操作已取消。';
+                return;
+            }
+            
+            try {
+                const db = await Store.openDB();
+                const stores = ['courses', 'knowledgeGraphs', 'debates', 'quizzes', 'materials'];
+                for (const storeName of stores) {
+                    if (db.objectStoreNames.contains(storeName)) {
+                        const tx = db.transaction(storeName, 'readwrite');
+                        tx.objectStore(storeName).clear();
+                        output.textContent += `已清除: ${storeName}\n`;
+                    }
+                }
+                
+                localStorage.clear();
+                output.textContent += '已清除: localStorage（含设置、主题等）\n\n';
+                output.textContent += '✅ 所有数据已清除！\n请刷新网页重新开始。';
+            } catch (error) {
+                output.textContent = '错误: ' + error.message;
+            }
+        }
+
+        async function testAI() {
+            const output = document.getElementById('output');
+            output.textContent = '正在测试AI连接...\n';
+            
+            const settings = Store.getSettings();
+            if (settings.aiApiKey) {
+                AiService.API_KEY = settings.aiApiKey;
+            }
+            if (settings.aiModel) {
+                AiService.MODEL_NAME = settings.aiModel;
+            }
+            if (settings.aiProvider) {
+                AiService.PROVIDER = settings.aiProvider;
+                if (settings.aiProvider === 'custom' && settings.aiEndpoint) {
+                    AiService.API_ENDPOINT = settings.aiEndpoint;
+                }
+            }
+            
+            output.textContent += `服务商: ${settings.aiProvider || '未配置'}\n`;
+            output.textContent += `模型: ${settings.aiModel || '未配置'}\n\n`;
+            
+            try {
+                const result = await AiService.callAI([
+                    { role: 'user', content: '你好，请回复"连接成功"四个字' }
+                ]);
+                output.textContent += `✅ AI连接成功！\n\n响应：${result}`;
+            } catch (error) {
+                output.textContent += `❌ AI连接失败\n\n错误信息：${error.message}\n\n请检查：\n1. API Key是否正确\n2. 模型名称是否正确\n3. 网络连接是否正常`;
+            }
+        }
+
+        async function deleteOldCourse() {
+            const output = document.getElementById('output');
+            output.textContent = '正在加载课程列表...\n';
+            
+            try {
+                const courses = await Store.getAllCourses();
+                
+                if (courses.length === 0) {
+                    output.textContent = '没有找到任何课程。';
+                    return;
+                }
+                
+                output.textContent = `找到 ${courses.length} 个课程：\n\n`;
+                courses.forEach((course, index) => {
+                    output.textContent += `${index + 1}. ${course.title || course.query || '未知标题'}\n`;
+                    output.textContent += `   ID: ${course.id}\n`;
+                    output.textContent += `   状态: ${course.status}\n\n`;
+                });
+                
+                if (confirm('确定要删除所有课程吗？这将清除所有课程及其相关数据。')) {
+                    const db = await Store.openDB();
+                    const stores = ['courses', 'knowledgeGraphs', 'debates', 'quizzes', 'materials'];
+                    
+                    for (const storeName of stores) {
+                        if (db.objectStoreNames.contains(storeName)) {
+                            const tx = db.transaction(storeName, 'readwrite');
+                            tx.objectStore(storeName).clear();
+                        }
+                    }
+                    
+                    output.textContent += '\n✅ 已删除所有课程及相关数据！\n请刷新网页重新开始。';
+                }
+            } catch (error) {
+                output.textContent = '错误: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

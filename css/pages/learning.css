@@ -1,0 +1,396 @@
+/* ===== 学习空间样式 ===== */
+
+.learning-page {
+    animation: fadeIn var(--transition-normal);
+}
+
+/* 学习空间页面标题 - 确保完整显示 */
+.learning-page > h2,
+.learning-page h2.learning-page-title {
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: initial !important;
+    max-width: none !important;
+    min-width: auto !important;
+    width: auto !important;
+    display: block !important;
+}
+
+/* 学习页面标题行 */
+.learning-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.learning-page-header .learning-page-title {
+    margin-bottom: 0 !important;
+    flex: 1;
+}
+
+/* 知识库跳转按钮 */
+.knowledge-repo-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+/* 学习页面操作按钮区域 */
+.learning-page-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+/* 课程学习评估按钮 */
+.assessment-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.assessment-btn:hover {
+    background-color: var(--color-border);
+}
+
+/* 三问导航 */
+.learning-nav {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+    background-color: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-sm);
+    border: 1px solid var(--color-border);
+}
+
+.learning-nav-btn {
+    flex: 1;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    background: none;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-align: center;
+    border: none;
+}
+
+.learning-nav-btn:hover {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+}
+
+.learning-nav-btn.active {
+    background-color: var(--color-primary);
+    color: #fff;
+}
+
+.learning-nav-btn.completed {
+    color: var(--color-success);
+}
+
+.learning-nav-btn.completed.active {
+    color: #fff;
+}
+
+.learning-nav-btn .nav-step {
+    display: block;
+    font-size: var(--font-size-xs);
+    font-weight: 400;
+    margin-top: 2px;
+    opacity: 0.8;
+}
+
+/* 学习内容区 */
+.learning-content {
+    background-color: var(--color-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    min-height: 400px;
+}
+
+.learning-content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.learning-content-title {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+}
+
+.learning-content-body {
+    padding: var(--spacing-lg);
+}
+
+/* ===== 知识图谱 ===== */
+.knowledge-graph-container {
+    position: relative;
+    width: 100%;
+    min-height: 500px;
+    overflow: hidden;
+}
+
+.knowledge-graph-canvas {
+    display: block;
+    background: radial-gradient(circle at center, #F8FAFC 0%, #EFF6FF 100%);
+    border-radius: var(--radius-md);
+    cursor: grab;
+}
+
+.knowledge-graph-canvas:active {
+    cursor: grabbing;
+}
+
+.knowledge-graph-canvas:active {
+    cursor: grabbing;
+}
+
+.kg-info-panel {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    width: 240px;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    box-shadow: var(--shadow-md);
+}
+
+.kg-info-title {
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-primary);
+}
+
+.kg-info-desc {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+}
+
+.kg-detail-btn {
+    width: 100%;
+    margin-top: var(--spacing-md);
+}
+
+.kg-controls {
+    position: absolute;
+    bottom: var(--spacing-md);
+    right: var(--spacing-md);
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+/* ===== 争议点面板 ===== */
+.debate-container {
+    animation: fadeIn var(--transition-normal);
+}
+
+.debate-topics-bar {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.debate-topic-btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--color-border);
+    border-radius: 99px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    background: var(--color-surface);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.debate-topic-btn.active {
+    background-color: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+}
+
+.debate-topic-btn:hover:not(.active) {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.debate-title {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--color-border);
+}
+
+.debate-columns {
+    display: flex;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+.debate-side {
+    flex: 1;
+    background-color: var(--color-bg);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+}
+
+.debate-side-a {
+    border-left: 4px solid var(--color-primary);
+}
+
+.debate-side-b {
+    border-right: 4px solid var(--color-danger);
+}
+
+.debate-side-header {
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+    color: var(--color-text);
+}
+
+.debate-vs {
+    display: flex;
+    align-items: center;
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+}
+
+.debate-evidence-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.debate-evidence {
+    background-color: var(--color-surface);
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-md);
+    border: 1px solid var(--color-border);
+}
+
+.evidence-content {
+    font-size: var(--font-size-sm);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-sm);
+}
+
+.evidence-source {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+.debate-conclusion {
+    background: linear-gradient(135deg, #EFF6FF, #F0F9FF);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    border: 1px solid #BFDBFE;
+    margin-top: var(--spacing-lg);
+}
+
+.conclusion-label {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.conclusion-content {
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    line-height: 1.7;
+}
+
+/* ===== 资料区样式已迁移到 knowledgeRepository.css ===== */
+/* .material-container { ... } */
+
+/* 完成按钮 */
+.learning-complete-btn {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-lg);
+}
+
+/* 门控提示 */
+.gate-hint {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.gate-hint-text {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+}
+
+.gate-hint .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 测评报告门控提示 */
+.report-gate-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    margin: var(--spacing-md) 0;
+    background: #FEF3C7;
+    border: 1px solid #FDE68A;
+    border-radius: var(--radius-md);
+    color: #92400E;
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+}
+
+.report-gate-hint .gate-icon {
+    font-size: 16px;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+    .debate-columns {
+        flex-direction: column;
+    }
+
+    .debate-vs {
+        text-align: center;
+        padding: var(--spacing-sm) 0;
+    }
+
+    .learning-nav {
+        flex-direction: column;
+    }
+}

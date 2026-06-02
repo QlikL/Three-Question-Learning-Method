@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三问高效学习</title>
+    <link rel="icon" type="image/jpeg" href="assets/icons/logo.jpg">
+    <!-- CSS 基础 -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <!-- CSS 页面样式 -->
+    <link rel="stylesheet" href="css/pages/home.css">
+    <link rel="stylesheet" href="css/pages/learning.css">
+    <link rel="stylesheet" href="css/pages/knowledgeRepository.css">
+    <link rel="stylesheet" href="css/pages/assessment.css">
+    <link rel="stylesheet" href="css/pages/profile.css">
+    <link rel="stylesheet" href="css/pages/settings.css">
+    <!-- CSS 组件样式 -->
+    <link rel="stylesheet" href="css/components/aiChatWidget.css">
+    <link rel="stylesheet" href="css/components/assessmentDialog.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header 导航栏 -->
+        <header id="app-header" class="app-header">
+            <div class="header-left">
+                <img src="assets/icons/logo.jpg" alt="三问高效学习Logo" class="app-logo">
+                <h1 class="app-title">三问高效学习</h1>
+            </div>
+            <nav class="header-nav" id="header-nav">
+                <a href="#/home" class="nav-item" data-route="/home">首页</a>
+                <a href="#/home/courses" class="nav-item" data-route="/home/courses">我的课程</a>
+                <a href="#/profile" class="nav-item" data-route="/profile">个人中心</a>
+            </nav>
+        </header>
+        <!-- 主内容容器 -->
+        <main id="app-content" class="app-content"></main>
+    </div>
+
+    <!-- JS 数据模型 -->
+    <script src="js/models/course.js"></script>
+    <script src="js/models/knowledge.js"></script>
+    <script src="js/models/debate.js"></script>
+    <script src="js/models/quiz.js"></script>
+    <script src="js/models/mentalModel.js"></script>
+    <script src="js/models/material.js"></script>
+    <!-- JS 数学公式渲染工具 -->
+    <script src="js/mathRenderer.js"></script>
+    <!-- JS 数据层 -->
+    <script src="js/store.js"></script>
+    <!-- JS AI 服务（真实API调用） -->
+    <script src="js/services/aiService.js"></script>
+    <!-- JS 评估数据服务 -->
+    <script src="js/services/assessmentDataService.js"></script>
+    <!-- JS 模拟数据 -->
+    <script src="js/mock/dataMock.js"></script>
+    <script src="js/mock/aiMock.js"></script>
+    <!-- JS 组件 -->
+    <script src="js/components/dialog.js"></script>
+    <script src="js/components/searchBar.js"></script>
+    <script src="js/components/courseCard.js"></script>
+    <script src="js/components/customSelect.js"></script>
+    <script src="js/components/knowledgeGraph.js"></script>
+    <script src="js/components/mentalModelList.js"></script>
+    <script src="js/components/debatePanel.js"></script>
+    <script src="js/components/materialList.js"></script>
+    <script src="js/components/quizItem.js"></script>
+    <script src="js/components/radarChart.js"></script>
+    <script src="js/components/barChart.js"></script>
+    <!-- JS AI聊天组件 -->
+    <script src="js/components/aiChatWidget.js"></script>
+    <!-- JS 评估弹窗组件 -->
+    <script src="js/components/assessmentDialog.js"></script>
+    <!-- JS 页面 -->
+    <script src="js/pages/homePage.js"></script>
+    <script src="js/pages/learningPage.js"></script>
+    <script src="js/pages/knowledgeRepositoryPage.js"></script>
+    <script src="js/pages/assessmentPage.js"></script>
+    <script src="js/pages/profilePage.js"></script>
+    <script src="js/pages/settingsPage.js"></script>
+    <!-- JS 路由与入口 -->
+    <script src="js/router.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

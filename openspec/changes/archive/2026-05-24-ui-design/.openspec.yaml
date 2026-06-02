@@ -1,0 +1,14 @@
+name: ui-design
+status: proposed
+created: 2026-05-24
+description: 三问高效学习机Web应用界面UI设计与实现
+artifacts:
+  proposal:
+    status: done
+    description: 变更提案 - 说明UI设计的目标、范围与决策
+  design:
+    status: done
+    description: 技术设计 - 界面布局、组件结构、交互流程
+  tasks:
+    status: done
+    description: 实施任务 - 具体的UI实现步骤
