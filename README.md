@@ -143,7 +143,7 @@ Three-Question Learning Method/
 |------|------|
 | 前端框架 | Vanilla JavaScript（无框架依赖） |
 | 页面渲染 | HTML5 + CSS3 + Canvas 2D |
-| 数据存储 | IndexedDB（主存储）+ localStorage（设置/主题） |
+| 数据存储 | IndexedDB（主存储）+ localStorage（设置/主题），纯浏览器内置存储，无需额外部署数据库或文件池 |
 | AI服务 | 多服务商支持（阿里云百炼/百度文心/讯飞星火/智谱AI/腾讯混元/月之暗面/DeepSeek/自定义） |
 | 图表渲染 | Canvas 2D 自绘（雷达图/柱状图/知识图谱） |
 | 路由管理 | 自实现 Hash Router |
