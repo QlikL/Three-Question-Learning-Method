@@ -526,6 +526,15 @@ const KnowledgeGraphRenderer = {
 
     /** 根据节点深度获取配色方案 */
     _getNodeColors(depth) {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        if (isDark) {
+            const palette = {
+                0: { bg: '#1E3A5F', border: '#3B82F6', text: '#93C5FD' },
+                1: { bg: '#2D2047', border: '#8B5CF6', text: '#C4B5FD' },
+                2: { bg: '#1A3A2A', border: '#10B981', text: '#6EE7B7' }
+            };
+            return palette[depth] || palette[0];
+        }
         const palette = {
             0: { bg: '#EFF6FF', border: '#3B82F6', text: '#1E40AF' },
             1: { bg: '#F5F3FF', border: '#8B5CF6', text: '#5B21B6' },
@@ -611,6 +620,7 @@ const KnowledgeGraphRenderer = {
             // 关系标签
             const relation = edge.relation || edge.label || '';
             if (relation) {
+                const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
                 ctx.font = '11px "PingFang SC", "Microsoft YaHei", sans-serif';
                 const tm = ctx.measureText(relation);
                 const labelPadX = 6;
@@ -618,7 +628,7 @@ const KnowledgeGraphRenderer = {
                 const lx = cpX;
                 const ly = cpY - 10;
 
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
+                ctx.fillStyle = isDark ? 'rgba(30, 41, 59, 0.92)' : 'rgba(255, 255, 255, 0.92)';
                 ctx.beginPath();
                 const bw = tm.width + labelPadX * 2;
                 const bh = 16 + labelPadY;
@@ -634,7 +644,7 @@ const KnowledgeGraphRenderer = {
                 ctx.quadraticCurveTo(lx - bw / 2, ly - bh, lx - bw / 2 + br, ly - bh);
                 ctx.fill();
 
-                ctx.fillStyle = 'rgba(71, 85, 105, 0.8)';
+                ctx.fillStyle = isDark ? 'rgba(203, 213, 225, 0.8)' : 'rgba(71, 85, 105, 0.8)';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'bottom';
                 ctx.fillText(relation, lx, ly - 3);
@@ -671,8 +681,9 @@ const KnowledgeGraphRenderer = {
             ctx.shadowOffsetY = 4;
 
             // 渐变填充
+            const isDarkNode = document.documentElement.getAttribute('data-theme') === 'dark';
             const nodeGrad = ctx.createLinearGradient(node.x - radius, node.y - radius, node.x + radius, node.y + radius);
-            nodeGrad.addColorStop(0, '#FFFFFF');
+            nodeGrad.addColorStop(0, isDarkNode ? '#1E293B' : '#FFFFFF');
             nodeGrad.addColorStop(1, colors.bg);
 
             ctx.beginPath();
@@ -708,7 +719,8 @@ const KnowledgeGraphRenderer = {
     /** 绘制背景网格 */
     _drawGrid(ctx, canvas) {
         const gridSize = 30;
-        ctx.strokeStyle = 'rgba(148, 163, 184, 0.08)';
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        ctx.strokeStyle = isDark ? 'rgba(148, 163, 184, 0.06)' : 'rgba(148, 163, 184, 0.08)';
         ctx.lineWidth = 1;
         for (let x = 0; x < canvas.width; x += gridSize) {
             ctx.beginPath();

@@ -21,6 +21,11 @@
         document.documentElement.setAttribute('data-theme', savedTheme);
     }
 
+    // ========== 初始化渐变流光背景 ==========
+    if (typeof GradientBackground !== 'undefined') {
+        GradientBackground.init();
+    }
+
     // ========== 恢复AI配置 ==========
     const settings = Store.getSettings();
     if (settings.aiApiKey) {

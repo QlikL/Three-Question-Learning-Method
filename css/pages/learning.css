@@ -161,8 +161,8 @@
     cursor: grab;
 }
 
-.knowledge-graph-canvas:active {
-    cursor: grabbing;
+[data-theme="dark"] .knowledge-graph-canvas {
+    background: radial-gradient(circle at center, #1a2332 0%, #0f1724 100%);
 }
 
 .knowledge-graph-canvas:active {

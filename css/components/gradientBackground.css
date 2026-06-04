@@ -1,0 +1,304 @@
+/* ===== 全屏渐变流光背景 ===== */
+
+.gradient-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+    transition: opacity 0.8s ease;
+}
+
+/* 深色模式隐藏 */
+[data-theme="dark"] .gradient-bg {
+    opacity: 0;
+}
+
+/* 第一层：大面积渐变旋转 - 多色渐变 */
+.gradient-layer-1 {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(135deg, 
+        #fdfbfb 0%, 
+        #ebedee 15%,
+        #f9f2e7 25%, 
+        #e0e7ff 35%,
+        #e8f5e9 45%,
+        #fce4ec 55%,
+        #f3e5f5 65%,
+        #e0f7fa 75%,
+        #fff8e1 85%,
+        #fdfbfb 100%
+    );
+    background-size: 200% 200%;
+    animation: gradientRotate 16s ease-in-out infinite;
+    opacity: 0.8;
+    will-change: transform;
+}
+
+@keyframes gradientRotate {
+    0% {
+        transform: rotate(0deg) scale(1);
+        background-position: 0% 0%;
+    }
+    25% {
+        background-position: 50% 50%;
+    }
+    50% {
+        transform: rotate(180deg) scale(1.05);
+        background-position: 100% 100%;
+    }
+    75% {
+        background-position: 50% 50%;
+    }
+    100% {
+        transform: rotate(360deg) scale(1);
+        background-position: 0% 0%;
+    }
+}
+
+/* 第二层：云朵光晕 - 浅粉色 */
+.gradient-layer-2 {
+    position: absolute;
+    top: 10%;
+    left: 15%;
+    width: 45%;
+    height: 45%;
+    background: radial-gradient(ellipse at center, rgba(255, 200, 200, 0.12) 0%, rgba(255, 200, 200, 0.06) 40%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(40px);
+    animation: cloudDrift1 24s ease-in-out infinite;
+    will-change: transform, opacity;
+}
+
+/* 第三层：云朵光晕 - 浅蓝色 */
+.gradient-layer-3 {
+    position: absolute;
+    bottom: 15%;
+    right: 10%;
+    width: 50%;
+    height: 50%;
+    background: radial-gradient(ellipse at center, rgba(200, 220, 255, 0.12) 0%, rgba(200, 220, 255, 0.06) 40%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(50px);
+    animation: cloudDrift2 30s ease-in-out infinite;
+    will-change: transform, opacity;
+}
+
+@keyframes cloudDrift1 {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.6;
+    }
+    25% {
+        transform: translate(40px, -30px) scale(1.1);
+        opacity: 0.8;
+    }
+    50% {
+        transform: translate(80px, 20px) scale(0.95);
+        opacity: 0.7;
+    }
+    75% {
+        transform: translate(30px, 40px) scale(1.05);
+        opacity: 0.9;
+    }
+    100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.6;
+    }
+}
+
+@keyframes cloudDrift2 {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.7;
+    }
+    33% {
+        transform: translate(-60px, -40px) scale(1.15);
+        opacity: 0.5;
+    }
+    66% {
+        transform: translate(-30px, 30px) scale(0.9);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.7;
+    }
+}
+
+/* 第四层：光条扫过 */
+.gradient-layer-4 {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 300%;
+    height: 100%;
+    background: linear-gradient(
+        105deg,
+        transparent 0%,
+        transparent 35%,
+        rgba(255, 255, 255, 0.08) 40%,
+        rgba(255, 255, 255, 0.2) 45%,
+        rgba(255, 255, 255, 0.35) 50%,
+        rgba(255, 255, 255, 0.2) 55%,
+        rgba(255, 255, 255, 0.08) 60%,
+        transparent 65%,
+        transparent 100%
+    );
+    animation: lightSweep 20s ease-in-out infinite;
+    will-change: transform;
+}
+
+@keyframes lightSweep {
+    0% {
+        transform: translateX(-30%);
+    }
+    40% {
+        transform: translateX(10%);
+    }
+    60% {
+        transform: translateX(10%);
+    }
+    100% {
+        transform: translateX(40%);
+    }
+}
+
+/* 第五层：辅助光晕 - 浅紫色 */
+.gradient-layer-5 {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    width: 35%;
+    height: 35%;
+    background: radial-gradient(ellipse at center, rgba(220, 200, 255, 0.1) 0%, rgba(220, 200, 255, 0.05) 50%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(60px);
+    animation: auxGlow 36s ease-in-out infinite;
+    will-change: transform, opacity;
+}
+
+@keyframes auxGlow {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.5;
+    }
+    25% {
+        transform: translate(-30%, -60%) scale(1.2);
+        opacity: 0.7;
+    }
+    50% {
+        transform: translate(-70%, -40%) scale(0.8);
+        opacity: 0.4;
+    }
+    75% {
+        transform: translate(-40%, -30%) scale(1.1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.5;
+    }
+}
+
+/* 第六层：云朵光晕 - 浅绿色 */
+.gradient-layer-6 {
+    position: absolute;
+    top: 60%;
+    left: 5%;
+    width: 40%;
+    height: 40%;
+    background: radial-gradient(ellipse at center, rgba(200, 255, 220, 0.1) 0%, rgba(200, 255, 220, 0.05) 40%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(45px);
+    animation: cloudDrift3 40s ease-in-out infinite;
+    will-change: transform, opacity;
+}
+
+@keyframes cloudDrift3 {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.5;
+    }
+    30% {
+        transform: translate(50px, -20px) scale(1.1);
+        opacity: 0.7;
+    }
+    60% {
+        transform: translate(20px, 30px) scale(0.95);
+        opacity: 0.6;
+    }
+    100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.5;
+    }
+}
+
+/* 第七层：云朵光晕 - 浅黄色 */
+.gradient-layer-7 {
+    position: absolute;
+    top: 25%;
+    right: 20%;
+    width: 35%;
+    height: 35%;
+    background: radial-gradient(ellipse at center, rgba(255, 245, 200, 0.1) 0%, rgba(255, 245, 200, 0.05) 40%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(50px);
+    animation: cloudDrift4 44s ease-in-out infinite;
+    will-change: transform, opacity;
+}
+
+@keyframes cloudDrift4 {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.6;
+    }
+    40% {
+        transform: translate(-40px, 30px) scale(1.15);
+        opacity: 0.8;
+    }
+    70% {
+        transform: translate(20px, -20px) scale(0.9);
+        opacity: 0.5;
+    }
+    100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.6;
+    }
+}
+
+/* 第八层：云朵光晕 - 浅桃色 */
+.gradient-layer-8 {
+    position: absolute;
+    bottom: 30%;
+    left: 40%;
+    width: 30%;
+    height: 30%;
+    background: radial-gradient(ellipse at center, rgba(255, 220, 210, 0.08) 0%, rgba(255, 220, 210, 0.04) 40%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(55px);
+    animation: cloudDrift5 50s ease-in-out infinite;
+    will-change: transform, opacity;
+}
+
+@keyframes cloudDrift5 {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.4;
+    }
+    50% {
+        transform: translate(30px, -40px) scale(1.2);
+        opacity: 0.6;
+    }
+    100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.4;
+    }
+}

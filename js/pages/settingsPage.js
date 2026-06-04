@@ -56,6 +56,17 @@ const SettingsPage = {
                                     <button class="theme-btn ${settings.theme === 'dark' ? 'active' : ''}" data-theme="dark"><span class="iconfont">&#xe764;</span> 深色模式</button>
                                 </div>
                             </div>
+                            <div class="settings-item">
+                                <label class="settings-label">流光效果背景</label>
+                                <div class="toggle-switch-container">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="gradient-bg-toggle" ${settings.gradientBgEnabled !== false ? 'checked' : ''}>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                    <span class="toggle-label">${settings.gradientBgEnabled !== false ? '已开启' : '已关闭'}</span>
+                                </div>
+                                <p class="settings-hint">浅色模式下的动态渐变流光背景效果</p>
+                            </div>
                         </div>
                     </div>
                     <div class="settings-section">
@@ -344,6 +355,21 @@ const SettingsPage = {
                 Dialog.toast(`已切换到${theme === 'dark' ? '深色' : '浅色'}模式`, 'success');
             });
         });
+
+        // 流光效果背景开关
+        const gradientBgToggle = document.getElementById('gradient-bg-toggle');
+        if (gradientBgToggle) {
+            gradientBgToggle.addEventListener('change', () => {
+                const enabled = gradientBgToggle.checked;
+                Store.saveSettings({ gradientBgEnabled: enabled });
+                const label = gradientBgToggle.closest('.toggle-switch-container').querySelector('.toggle-label');
+                if (label) label.textContent = enabled ? '已开启' : '已关闭';
+                if (typeof GradientBackground !== 'undefined') {
+                    GradientBackground.setEnabled(enabled);
+                }
+                Dialog.toast(`流光效果背景已${enabled ? '开启' : '关闭'}`, 'success');
+            });
+        }
 
         // 测验难度切换
         document.querySelectorAll('.difficulty-btn').forEach(btn => {
