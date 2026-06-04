@@ -18,13 +18,13 @@ const SettingsPage = {
             <div class="page-container settings-page">
                 <div class="settings-header">
                     <button class="btn btn-secondary settings-back-btn" onclick="Router.navigate('/profile')">← 返回个人中心</button>
-                    <h2 class="settings-title">⚙ 设置</h2>
+                    <h2 class="settings-title"><span class="iconfont">&#xe979;</span> 设置</h2>
                 </div>
                 <div class="settings-content">
                     <div class="settings-section">
                         <div class="settings-section-header">
-                            <h3 class="settings-section-title">🤖 AI 模型配置</h3>
-                            <button class="btn btn-secondary" id="saved-models-btn">📋 已保存模型</button>
+                            <h3 class="settings-section-title"><span class="iconfont">&#xe692;</span> AI 模型配置</h3>
+                            <button class="btn btn-secondary" id="saved-models-btn"><span class="iconfont">&#xe6f3;</span> 已保存模型</button>
                         </div>
                         <div class="settings-card">
                             <div class="settings-item">
@@ -43,17 +43,17 @@ const SettingsPage = {
                                 <label class="settings-label">AI 模型</label>
                                 <div id="settings-ai-model-container"></div>
                             </div>
-                            <button class="btn btn-primary settings-save-config-btn" id="save-config-btn">💾 保存配置</button>
+                            <button class="btn btn-primary settings-save-config-btn" id="save-config-btn"><span class="iconfont">&#xe936;</span> 保存配置</button>
                         </div>
                     </div>
                     <div class="settings-section">
-                        <h3 class="settings-section-title">🎨 主题设置</h3>
+                        <h3 class="settings-section-title"><span class="iconfont">&#xeaec;</span> 主题设置</h3>
                         <div class="settings-card">
                             <div class="settings-item">
                                 <label class="settings-label">界面主题</label>
                                 <div class="theme-toggle-group">
-                                    <button class="theme-btn ${settings.theme === 'light' ? 'active' : ''}" data-theme="light">☀️ 浅色模式</button>
-                                    <button class="theme-btn ${settings.theme === 'dark' ? 'active' : ''}" data-theme="dark">🌙 深色模式</button>
+                                    <button class="theme-btn ${settings.theme === 'light' ? 'active' : ''}" data-theme="light"><span class="iconfont">&#xe62e;</span> 浅色模式</button>
+                                    <button class="theme-btn ${settings.theme === 'dark' ? 'active' : ''}" data-theme="dark"><span class="iconfont">&#xe764;</span> 深色模式</button>
                                 </div>
                             </div>
                         </div>
@@ -73,7 +73,7 @@ const SettingsPage = {
                         </div>
                     </div>
                     <div class="settings-section">
-                        <h3 class="settings-section-title">💾 数据管理</h3>
+                        <h3 class="settings-section-title"><span class="iconfont">&#xe604;</span> 数据管理</h3>
                         <div class="settings-card">
                             <div class="settings-item">
                                 <label class="settings-label">课程数据</label>
@@ -84,12 +84,12 @@ const SettingsPage = {
                             </div>
                             <div class="settings-item settings-item-danger">
                                 <label class="settings-label">危险操作</label>
-                                <button class="btn btn-danger" id="clear-data-btn">🗑️ 清除所有学习数据</button>
+                                <button class="btn btn-danger" id="clear-data-btn"><span class="iconfont">&#xe652;</span> 清除所有学习数据</button>
                             </div>
                         </div>
                     </div>
                     <div class="settings-section">
-                        <h3 class="settings-section-title">ℹ️ 关于与帮助</h3>
+                        <h3 class="settings-section-title"><span class="iconfont">&#xe8ac;</span> 关于与帮助</h3>
                         <div class="settings-card">
                             <div class="settings-item">
                                 <label class="settings-label">版本信息</label>
@@ -111,7 +111,7 @@ const SettingsPage = {
                                 <label class="settings-label">反馈与建议</label>
                                 <div class="settings-info">
                                     <p>如有问题或建议，请通过 GitHub 提交 Issue</p>
-                                    <a href="https://github.com/QlikL/Three-Question-Learning-Method/issues" target="_blank" class="btn btn-secondary">📝 提交反馈</a>
+                                    <a href="https://github.com/QlikL/Three-Question-Learning-Method/issues" target="_blank" class="btn btn-secondary"><span class="iconfont">&#xe662;</span> 提交反馈</a>
                                 </div>
                             </div>
                         </div>
@@ -121,7 +121,7 @@ const SettingsPage = {
             <div class="settings-modal-overlay" id="saved-models-modal" style="display:none;">
                 <div class="settings-modal-content">
                     <div class="settings-modal-header">
-                        <h3>📋 已保存模型</h3>
+                        <h3><span class="iconfont">&#xe6f3;</span> 已保存模型</h3>
                         <button class="settings-modal-close" id="saved-models-close">×</button>
                     </div>
                     <div class="settings-modal-body" id="saved-models-list"></div>

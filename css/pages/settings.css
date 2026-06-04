@@ -19,6 +19,14 @@
 .settings-title {
     font-size: var(--font-size-xl);
     margin: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.settings-title .iconfont {
+    font-size: 1.2em;
+    vertical-align: middle;
 }
 
 .settings-content {
@@ -40,6 +48,14 @@
     margin: 0 0 var(--spacing-lg) 0;
     padding-bottom: var(--spacing-md);
     border-bottom: 2px solid var(--color-primary-bg);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.settings-section-title .iconfont {
+    font-size: 1.1em;
+    vertical-align: middle;
 }
 
 .settings-section-header {

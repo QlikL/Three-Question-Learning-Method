@@ -12,9 +12,9 @@ const LearningPage = {
 
     /** 阶段名称 */
     PHASES: [
-        { key: 'phase1', title: '第一问', subtitle: '5个核心心智模型', icon: '🧠' },
-        { key: 'phase2', title: '第二问', subtitle: '3个根本性分歧', icon: '⚔️' },
-        { key: 'phase3', title: '第三问', subtitle: '10道深度理解题', icon: '🎯' }
+        { key: 'phase1', title: '第一问', subtitle: '5个核心心智模型', icon: 'icon-model' },
+        { key: 'phase2', title: '第二问', subtitle: '3个根本性分歧', icon: 'icon-zyjj' },
+        { key: 'phase3', title: '第三问', subtitle: '10道深度理解题', icon: 'icon-ceyan' }
     ],
 
     /**
@@ -36,7 +36,7 @@ const LearningPage = {
         if (!courseData) {
             container.innerHTML = `
                 <div class="empty-state">
-                    <div class="empty-state-icon">❓</div>
+                    <div class="empty-state-icon iconfont">&#xe693;</div>
                     <p>课程未找到</p>
                     <a href="#/home" class="btn btn-primary" style="margin-top:16px;">返回首页</a>
                 </div>
@@ -67,10 +67,10 @@ const LearningPage = {
                     </h2>
                     <div class="learning-page-actions">
                         <button class="btn btn-secondary knowledge-repo-btn" onclick="Router.navigate('/knowledge/${this._courseId}')">
-                            📄 查看资料
+                            <span class="iconfont">&#xe62b;</span> 查看资料
                         </button>
                         <button class="btn btn-secondary assessment-btn" onclick="AssessmentDialog.show('${this._courseId}')">
-                            📊 课程学习评估
+                            <span class="iconfont">&#xe64b;</span> 课程学习评估
                         </button>
                     </div>
                 </div>
@@ -184,7 +184,7 @@ const LearningPage = {
             return `
                 <button class="learning-nav-btn ${isActive ? 'active' : ''} ${done ? 'completed' : ''}"
                         data-phase="${i}" ${clickable ? '' : 'disabled'}>
-                    ${phase.icon} ${phase.title}
+                    <span class="iconfont ${phase.icon}"></span> ${phase.title}
                     ${done ? ' ✓' : ''}
                     <span class="nav-step">${phase.subtitle}</span>
                 </button>
@@ -237,7 +237,7 @@ const LearningPage = {
     /** 渲染当前阶段内容 */
     async _renderPhaseContent() {
         const phase = this.PHASES[this._currentPhase];
-        document.getElementById('phase-title').textContent = phase.icon + ' ' + phase.title + '：' + phase.subtitle;
+        document.getElementById('phase-title').innerHTML = '<span class="iconfont ' + phase.icon + '"></span> ' + phase.title + '：' + phase.subtitle;
 
         const body = document.getElementById('phase-body');
         const actions = document.getElementById('phase-actions');

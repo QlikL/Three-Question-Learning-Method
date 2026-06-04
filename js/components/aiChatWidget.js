@@ -84,7 +84,7 @@ const AiChatWidget = {
     _createFloatingButton() {
         const button = document.createElement('button');
         button.className = 'ai-chat-float-btn';
-        button.innerHTML = '😊';
+        button.innerHTML = '<span class="iconfont">&#xe692;</span>';
         button.title = 'AI学习助手';
         
         button.addEventListener('click', () => {
@@ -105,7 +105,7 @@ const AiChatWidget = {
 
         window.innerHTML = `
             <div class="ai-chat-header">
-                <span class="ai-chat-title">🤖 AI学习助手</span>
+                <span class="ai-chat-title"><span class="iconfont ai-chat-icon">&#xe692;</span> AI学习助手</span>
                 <div class="ai-chat-header-actions">
                     <button class="ai-chat-new-chat-btn" id="ai-chat-new-chat-btn" title="新开对话">＋</button>
                     <button class="ai-chat-close-btn" title="关闭">×</button>
@@ -350,7 +350,7 @@ const AiChatWidget = {
             // 显示欢迎界面
             container.innerHTML = `
                 <div class="ai-chat-welcome">
-                    <div class="ai-chat-welcome-icon">🤖</div>
+                    <div class="ai-chat-welcome-icon iconfont ai-chat-icon">&#xe692;</div>
                     <p>你好！我是AI学习助手</p>
                     <p class="ai-chat-welcome-hint">有什么问题可以帮助你？</p>
                 </div>
