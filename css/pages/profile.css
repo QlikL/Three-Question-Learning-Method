@@ -115,7 +115,6 @@
     width: 90%;
     max-width: 600px;
     max-height: 80vh;
-    overflow: hidden;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     animation: slideUp var(--transition-normal);
 }
@@ -167,8 +166,17 @@
 
 .profile-modal-body {
     padding: var(--spacing-lg);
-    overflow-y: auto;
     max-height: calc(80vh - 80px);
+}
+
+.profile-modal-body .course-list-scroll {
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: calc(80vh - 160px);
+}
+
+.profile-modal-body .custom-select-dropdown {
+    z-index: 1100;
 }
 
 /* 课程列表弹窗 */

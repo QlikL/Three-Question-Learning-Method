@@ -808,33 +808,38 @@ const AiService = {
      * @returns {Promise<Object>} 资料数据
      */
     async generateMaterials(query) {
-        const prompt = `你是一个学习资源推荐专家。请为以下学习主题推荐国内主流视频平台上的优质学习视频资源。
+        const prompt = `你是一个学习资源推荐专家。请为以下学习主题推荐两类学习资源：外部文字资料和学习视频。
 
 学习主题：${query}
 
 请返回JSON格式：
 {
-  "items": [
+  "textResources": [
     {
-      "id": "mat_1",
-      "title": "视频/资料标题",
-      "type": "ai",
-      "format": "video",
-      "source": "平台名称",
-      "size": null,
-      "url": "https://...（真实可访问的URL链接）",
+      "id": "text_1",
+      "title": "针对该主题的资料描述标题",
+      "source": "知乎",
       "tags": ["标签1", "标签2"]
-    },
-    ...
+    }
+  ],
+  "videoResources": [
+    {
+      "id": "vid_1",
+      "title": "针对该主题的视频描述标题",
+      "source": "B站",
+      "tags": ["标签1", "标签2"]
+    }
   ]
 }
 
 要求：
-- 推荐5-8个高质量学习视频或资料
-- 优先推荐国内视频平台资源：B站（bilibili）、慕课网、网易公开课、中国大学MOOC、腾讯课堂、抖音等
-- 也可以包含官方文档、经典书籍、优质博客教程等文字资料
-- 必须提供真实可访问的URL链接
-- 标签要准确描述资料特点`;
+1. 外部文字资料（textResources）生成6-10个，来源平台从以下选择：知乎、百度文库、菜鸟教程、GitHub、CSDN、掘金、W3School、SegmentFault、博客园、开源中国
+2. 学习视频（videoResources）生成6-10个，来源平台从以下选择：B站、抖音、慕课网、网易公开课、中国大学MOOC、腾讯课堂、优酷、西瓜视频
+3. 每个资源的title要具体描述该主题下的学习内容，不要泛泛而谈
+4. 标签要准确描述资料特点
+5. 两种资源分开返回，不要混合
+6. 不需要返回url字段，系统会自动构造链接
+7. source字段必须严格使用上述平台名称之一`;
 
         const response = await this.callAI([
             { role: 'user', content: prompt }
@@ -843,7 +848,31 @@ const AiService = {
         try {
             const jsonMatch = response.match(/\{[\s\S]*\}/);
             if (jsonMatch) {
-                return JSON.parse(jsonMatch[0]);
+                const parsed = JSON.parse(jsonMatch[0]);
+                // 合并 textResources 和 videoResources 为 items 数组，并自动构造搜索URL
+                const textItems = (parsed.textResources || []).map((item, idx) => ({
+                    id: item.id || `text_${idx + 1}`,
+                    title: item.title || `${query}相关资料`,
+                    type: 'ai',
+                    category: 'text',
+                    format: 'link',
+                    source: item.source || '知乎',
+                    size: null,
+                    tags: item.tags || ['学习资料'],
+                    url: this._buildSearchUrl(item.source || '知乎', query, 'text')
+                }));
+                const videoItems = (parsed.videoResources || []).map((item, idx) => ({
+                    id: item.id || `vid_${idx + 1}`,
+                    title: item.title || `${query}相关视频`,
+                    type: 'ai',
+                    category: 'video',
+                    format: 'video',
+                    source: item.source || 'B站',
+                    size: null,
+                    tags: item.tags || ['视频教程'],
+                    url: this._buildSearchUrl(item.source || 'B站', query, 'video')
+                }));
+                return { items: [...textItems, ...videoItems] };
             }
         } catch (e) {
             console.warn('资料推荐生成失败:', e);
@@ -851,6 +880,42 @@ const AiService = {
 
         // 降级到模拟数据
         return this._generateMockMaterials(query);
+    },
+
+    /**
+     * 根据平台名称构造真实可用的搜索URL
+     * @private
+     * @param {string} platform - 平台名称
+     * @param {string} query - 搜索关键词
+     * @param {string} category - 'text' | 'video'
+     * @returns {string} 搜索URL
+     */
+    _buildSearchUrl(platform, query, category) {
+        const q = encodeURIComponent(query);
+        const textUrls = {
+            '知乎': `https://www.zhihu.com/search?type=content&q=${q}`,
+            '百度文库': `https://wenku.baidu.com/search?word=${q}`,
+            '菜鸟教程': `https://www.runoob.com/`,
+            'GitHub': `https://github.com/search?q=${q}&type=repositories`,
+            'CSDN': `https://so.csdn.net/so/search?q=${q}`,
+            '掘金': `https://juejin.cn/search?query=${q}`,
+            'W3School': `https://www.w3school.com.cn/`,
+            'SegmentFault': `https://segmentfault.com/search?q=${q}`,
+            '博客园': `https://zzk.cnblogs.com/s?w=${q}`,
+            '开源中国': `https://www.oschina.net/search?q=${q}`
+        };
+        const videoUrls = {
+            'B站': `https://search.bilibili.com/all?keyword=${q}`,
+            '抖音': `https://www.douyin.com/search/${q}`,
+            '慕课网': `https://www.imooc.com/search/?word=${q}`,
+            '网易公开课': `https://open.163.com/`,
+            '中国大学MOOC': `https://www.icourse163.org/search.htm?search=${q}`,
+            '腾讯课堂': `https://ke.qq.com/search.html?word=${q}`,
+            '优酷': `https://so.youku.com/search_video/q_${q}`,
+            '西瓜视频': `https://www.ixigua.com/search/${q}`
+        };
+        const urlMap = category === 'video' ? videoUrls : textUrls;
+        return urlMap[platform] || `https://www.baidu.com/s?wd=${q}+${encodeURIComponent(platform)}`;
     },
 
     /**
@@ -930,42 +995,61 @@ const AiService = {
     },
 
     /**
-     * 生成模拟资料推荐（降级方法）
+     * 生成模拟资料推荐（降级方法，使用真实搜索URL）
      * @private
      */
     _generateMockMaterials(query) {
+        const textPlatforms = [
+            { source: '知乎', title: `${query} 相关话题深度讨论`, tags: ['问答讨论', '深度解析'] },
+            { source: '百度文库', title: `${query} 专业文档资料`, tags: ['文档资料', '专业'] },
+            { source: '菜鸟教程', title: `${query} 入门到精通教程`, tags: ['教程', '入门'] },
+            { source: 'GitHub', title: `${query} 开源项目与代码示例`, tags: ['开源项目', '代码示例'] },
+            { source: 'CSDN', title: `${query} 技术博客与解决方案`, tags: ['技术博客', '解决方案'] },
+            { source: '掘金', title: `${query} 技术文章精选`, tags: ['技术文章', '开发者社区'] },
+            { source: 'SegmentFault', title: `${query} 技术问答与讨论`, tags: ['技术问答', '社区讨论'] },
+            { source: '博客园', title: `${query} 开发者博客`, tags: ['博客', '技术分享'] }
+        ];
+        const videoPlatforms = [
+            { source: 'B站', title: `${query} B站热门学习视频合集`, tags: ['视频教程', '入门'] },
+            { source: '中国大学MOOC', title: `${query} 高校精品课程`, tags: ['高校课程', '系统学习'] },
+            { source: '慕课网', title: `${query} 实战技术教程`, tags: ['实战', '进阶'] },
+            { source: '网易公开课', title: `${query} 名校公开课资源`, tags: ['公开课', '名校课程'] },
+            { source: '抖音', title: `${query} 知识短视频精选`, tags: ['短视频', '碎片学习'] },
+            { source: '腾讯课堂', title: `${query} 在线培训课程`, tags: ['在线课程', '培训'] },
+            { source: '优酷', title: `${query} 教学视频`, tags: ['教学视频', '详细讲解'] },
+            { source: '西瓜视频', title: `${query} 知识科普视频`, tags: ['科普', '通俗易懂'] }
+        ];
+        const shuffleAndPick = (arr, min, max) => {
+            const shuffled = [...arr].sort(() => Math.random() - 0.5);
+            const count = min + Math.floor(Math.random() * (max - min + 1));
+            return shuffled.slice(0, Math.min(count, arr.length));
+        };
+        const selectedText = shuffleAndPick(textPlatforms, 6, 8);
+        const selectedVideo = shuffleAndPick(videoPlatforms, 6, 8);
         return {
             items: [
-                {
-                    id: 'mat_1',
-                    title: `${query} - B站优质教程`,
+                ...selectedText.map((item, idx) => ({
+                    id: `text_${idx + 1}`,
+                    title: item.title,
                     type: 'ai',
-                    format: 'video',
-                    source: 'B站',
+                    category: 'text',
+                    format: 'link',
+                    source: item.source,
                     size: null,
-                    tags: ['视频教程', '入门'],
-                    url: `https://search.bilibili.com/all?keyword=${encodeURIComponent(query)}`
-                },
-                {
-                    id: 'mat_2',
-                    title: `${query} - 中国大学MOOC课程`,
+                    tags: item.tags,
+                    url: this._buildSearchUrl(item.source, query, 'text')
+                })),
+                ...selectedVideo.map((item, idx) => ({
+                    id: `vid_${idx + 1}`,
+                    title: item.title,
                     type: 'ai',
+                    category: 'video',
                     format: 'video',
-                    source: '中国大学MOOC',
+                    source: item.source,
                     size: null,
-                    tags: ['高校课程', '系统学习'],
-                    url: `https://www.icourse163.org/search.htm?search=${encodeURIComponent(query)}`
-                },
-                {
-                    id: 'mat_3',
-                    title: `${query} - 慕课网实战教程`,
-                    type: 'ai',
-                    format: 'video',
-                    source: '慕课网',
-                    size: null,
-                    tags: ['实战', '进阶'],
-                    url: `https://www.imooc.com/search/?word=${encodeURIComponent(query)}`
-                }
+                    tags: item.tags,
+                    url: this._buildSearchUrl(item.source, query, 'video')
+                }))
             ]
         };
     }

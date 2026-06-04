@@ -295,44 +295,69 @@ const DataMock = {
         };
     },
 
-    /** 生成示例资料 */
-    getSampleMaterials(courseId) {
+    /**
+     * 生成示例资料（使用真实搜索URL）
+     * @param {string} courseId
+     * @param {string} [topic] - 课程主题，用于构造搜索URL
+     */
+    getSampleMaterials(courseId, topic) {
+        const q = encodeURIComponent(topic || '学习');
+        const textPlatforms = [
+            { source: '知乎', title: `${topic || ''} 相关话题深度讨论`, tags: ['问答讨论', '深度解析'], url: `https://www.zhihu.com/search?type=content&q=${q}` },
+            { source: '百度文库', title: `${topic || ''} 专业文档资料`, tags: ['文档资料', '专业'], url: `https://wenku.baidu.com/search?word=${q}` },
+            { source: '菜鸟教程', title: `${topic || ''} 入门到精通教程`, tags: ['教程', '入门'], url: `https://www.runoob.com/` },
+            { source: 'GitHub', title: `${topic || ''} 开源项目与代码示例`, tags: ['开源项目', '代码示例'], url: `https://github.com/search?q=${q}&type=repositories` },
+            { source: 'CSDN', title: `${topic || ''} 技术博客与解决方案`, tags: ['技术博客', '解决方案'], url: `https://so.csdn.net/so/search?q=${q}` },
+            { source: '掘金', title: `${topic || ''} 技术文章精选`, tags: ['技术文章', '开发者社区'], url: `https://juejin.cn/search?query=${q}` },
+            { source: 'SegmentFault', title: `${topic || ''} 技术问答与讨论`, tags: ['技术问答', '社区讨论'], url: `https://segmentfault.com/search?q=${q}` },
+            { source: '博客园', title: `${topic || ''} 开发者博客`, tags: ['博客', '技术分享'], url: `https://zzk.cnblogs.com/s?w=${q}` }
+        ];
+        const videoPlatforms = [
+            { source: 'B站', title: `${topic || ''} B站热门学习视频合集`, tags: ['视频教程', '入门'], url: `https://search.bilibili.com/all?keyword=${q}` },
+            { source: '中国大学MOOC', title: `${topic || ''} 高校精品课程`, tags: ['高校课程', '系统学习'], url: `https://www.icourse163.org/search.htm?search=${q}` },
+            { source: '慕课网', title: `${topic || ''} 实战技术教程`, tags: ['实战', '进阶'], url: `https://www.imooc.com/search/?word=${q}` },
+            { source: '网易公开课', title: `${topic || ''} 名校公开课资源`, tags: ['公开课', '名校课程'], url: `https://open.163.com/` },
+            { source: '抖音', title: `${topic || ''} 知识短视频精选`, tags: ['短视频', '碎片学习'], url: `https://www.douyin.com/search/${q}` },
+            { source: '腾讯课堂', title: `${topic || ''} 在线培训课程`, tags: ['在线课程', '培训'], url: `https://ke.qq.com/search.html?word=${q}` },
+            { source: '优酷', title: `${topic || ''} 教学视频`, tags: ['教学视频', '详细讲解'], url: `https://so.youku.com/search_video/q_${q}` },
+            { source: '西瓜视频', title: `${topic || ''} 知识科普视频`, tags: ['科普', '通俗易懂'], url: `https://www.ixigua.com/search/${q}` }
+        ];
+        // 随机选取6-8个
+        const shuffleAndPick = (arr, min, max) => {
+            const shuffled = [...arr].sort(() => Math.random() - 0.5);
+            const count = min + Math.floor(Math.random() * (max - min + 1));
+            return shuffled.slice(0, Math.min(count, arr.length));
+        };
+        const selectedText = shuffleAndPick(textPlatforms, 6, 8);
+        const selectedVideo = shuffleAndPick(videoPlatforms, 6, 8);
+        const now = Date.now();
         return {
             courseId: courseId,
             items: [
-                {
-                    id: 'mat_1',
-                    title: 'B站 - 热门学习视频',
+                ...selectedText.map((item, i) => ({
+                    id: `text_${i + 1}`,
+                    title: item.title,
                     type: 'ai',
-                    format: 'video',
-                    source: 'B站',
+                    category: 'text',
+                    format: 'link',
+                    source: item.source,
                     size: null,
-                    uploadTime: Date.now() - 86400000 * 2,
-                    tags: ['视频教程', '入门'],
-                    url: 'https://www.bilibili.com/'
-                },
-                {
-                    id: 'mat_2',
-                    title: '中国大学MOOC - 高校精品课程',
+                    uploadTime: now - 86400000 * (i + 1),
+                    tags: item.tags,
+                    url: item.url
+                })),
+                ...selectedVideo.map((item, i) => ({
+                    id: `vid_${i + 1}`,
+                    title: item.title,
                     type: 'ai',
+                    category: 'video',
                     format: 'video',
-                    source: '中国大学MOOC',
+                    source: item.source,
                     size: null,
-                    uploadTime: Date.now() - 86400000 * 1,
-                    tags: ['高校课程', '系统学习'],
-                    url: 'https://www.icourse163.org/'
-                },
-                {
-                    id: 'mat_3',
-                    title: '慕课网 - 实战技术教程',
-                    type: 'ai',
-                    format: 'video',
-                    source: '慕课网',
-                    size: null,
-                    uploadTime: Date.now() - 3600000,
-                    tags: ['实战', '进阶'],
-                    url: 'https://www.imooc.com/'
-                }
+                    uploadTime: now - 3600000 * (i + 1),
+                    tags: item.tags,
+                    url: item.url
+                }))
             ]
         };
     },

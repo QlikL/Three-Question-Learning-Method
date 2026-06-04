@@ -177,6 +177,34 @@
     font-size: var(--font-size-sm);
 }
 
+/* 分区标题变体样式 */
+.material-section[data-section="ai-summary"] .material-section-title {
+    border-bottom-color: #7C3AED;
+}
+
+.material-section[data-section="ai-summary"] .material-count {
+    color: #7C3AED;
+    background: #EDE9FE;
+}
+
+.material-section[data-section="text"] .material-section-title {
+    border-bottom-color: #D97706;
+}
+
+.material-section[data-section="text"] .material-count {
+    color: #D97706;
+    background: #FEF3C7;
+}
+
+.material-section[data-section="video"] .material-section-title {
+    border-bottom-color: #1D4ED8;
+}
+
+.material-section[data-section="video"] .material-count {
+    color: #1D4ED8;
+    background: #DBEAFE;
+}
+
 /* 资料列表 */
 .material-list {
     display: grid;

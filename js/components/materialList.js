@@ -27,15 +27,17 @@ const MaterialList = {
         }
 
         const aiSummaryItems = materialData.items.filter(m => m.type === 'ai-summary');
-        const aiItems = materialData.items.filter(m => m.type === 'ai');
+        // 兼容历史数据：根据 category 字段分类，无 category 时根据 format 推断
+        const aiTextItems = materialData.items.filter(m => m.type === 'ai' && this._resolveCategory(m) === 'text');
+        const aiVideoItems = materialData.items.filter(m => m.type === 'ai' && this._resolveCategory(m) === 'video');
         const uploadItems = materialData.items.filter(m => m.type === 'upload');
-
-        const allAiItems = [...aiSummaryItems, ...aiItems];
 
         container.innerHTML = `
             <div class="material-container">
-                ${allAiItems.length > 0 ? this._renderSection(' AI 补充资料', allAiItems) : ''}
-                ${uploadItems.length > 0 ? this._renderSection('📎 用户上传资料', uploadItems) : ''}
+                ${aiSummaryItems.length > 0 ? this._renderSection('📘 AI 总结文档', aiSummaryItems, 'ai-summary') : ''}
+                ${aiTextItems.length > 0 ? this._renderSection('📄 外部文字资料', aiTextItems, 'text') : ''}
+                ${aiVideoItems.length > 0 ? this._renderSection('🎬 学习视频', aiVideoItems, 'video') : ''}
+                ${uploadItems.length > 0 ? this._renderSection('📎 用户上传资料', uploadItems, 'upload') : ''}
             </div>
             <div id="material-preview-modal" class="modal" style="display:none;">
                 <div class="modal-content modal-lg">
@@ -49,6 +51,17 @@ const MaterialList = {
         `;
         
         this._bindEvents();
+    },
+
+    /**
+     * 解析资料的 category（兼容历史数据）
+     * @param {Object} item - 资料项
+     * @returns {string} 'text' | 'video'
+     */
+    _resolveCategory(item) {
+        if (item.category) return item.category;
+        if (item.format === 'video') return 'video';
+        return 'text';
     },
     
     /** 绑定点击事件 */
@@ -448,11 +461,11 @@ const MaterialList = {
     },
 
     /** 渲染分类区块 */
-    _renderSection(title, items) {
+    _renderSection(title, items, sectionType) {
         if (items.length === 0) return '';
 
         return `
-            <div class="material-section">
+            <div class="material-section" data-section="${sectionType || ''}">
                 <h4 class="material-section-title">${title} <span class="material-count">${items.length} 个资料</span></h4>
                 <div class="material-list">
                     ${items.map(item => this._renderItem(item)).join('')}
@@ -466,6 +479,7 @@ const MaterialList = {
         const isAiSummary = item.type === 'ai-summary';
         const isOnline = item.type === 'ai' && item.url;
         const isVideo = item.format === 'video';
+        const isTextResource = item.type === 'ai' && this._resolveCategory(item) === 'text';
         const isUpload = item.type === 'upload';
         let iconHtml, iconBg;
         
@@ -475,6 +489,9 @@ const MaterialList = {
         } else if (isVideo) {
             iconHtml = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7L8 5z" fill="#1D4ED8"/></svg>';
             iconBg = 'background: linear-gradient(135deg, #DBEAFE, #BFDBFE);';
+        } else if (isTextResource) {
+            iconHtml = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+            iconBg = 'background: linear-gradient(135deg, #FEF3C7, #FDE68A);';
         } else if (item.format === 'pdf') {
             iconHtml = '<span style="color:#DC2626;font-size:13px;font-weight:700;line-height:1;">PDF</span>';
             iconBg = 'background: linear-gradient(135deg, #FEE2E2, #FECACA);';

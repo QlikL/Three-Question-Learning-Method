@@ -421,10 +421,10 @@ const AiMock = {
                 if (!baseData.items) baseData.items = [];
             } catch (error) {
                 console.warn('资料推荐AI调用失败，降级到模拟数据:', error);
-                baseData = DataMock.getSampleMaterials(courseId);
+                baseData = DataMock.getSampleMaterials(courseId, topic);
             }
         } else {
-            baseData = DataMock.getSampleMaterials(courseId);
+            baseData = DataMock.getSampleMaterials(courseId, topic);
         }
 
         const summaryDocs = await this._generateSummaryDocuments(courseId, topic);

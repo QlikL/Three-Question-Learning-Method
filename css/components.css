@@ -318,6 +318,14 @@
     font-weight: 600;
 }
 
+.custom-select-option.selected:first-child {
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.custom-select-option.selected:last-child {
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
 .custom-select-option.selected::before {
     content: '\2713';
     font-weight: bold;
@@ -876,7 +884,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 10000;
+    z-index: 20000;
     animation: dialogFadeIn 0.2s ease;
 }
 
@@ -923,6 +931,20 @@
     min-width: 80px;
 }
 
+/* 深色模式 Dialog */
+[data-theme="dark"] .dialog-box {
+    background: var(--color-surface);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .dialog-title {
+    color: var(--color-text);
+}
+
+[data-theme="dark"] .dialog-message {
+    color: var(--color-text-secondary);
+}
+
 /* ===== Toast 轻提示 ===== */
 
 .toast {
@@ -930,7 +952,7 @@
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 10001;
+    z-index: 20001;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -975,6 +997,35 @@
 .toast-icon {
     font-size: 16px;
     flex-shrink: 0;
+}
+
+/* 深色模式 Toast */
+[data-theme="dark"] .toast {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .toast-success {
+    background: #064E3B;
+    color: #A7F3D0;
+    border-color: #065F46;
+}
+
+[data-theme="dark"] .toast-error {
+    background: #7F1D1D;
+    color: #FECACA;
+    border-color: #991B1B;
+}
+
+[data-theme="dark"] .toast-warning {
+    background: #78350F;
+    color: #FDE68A;
+    border-color: #92400E;
+}
+
+[data-theme="dark"] .toast-info {
+    background: #1E3A5F;
+    color: #BFDBFE;
+    border-color: #1E40AF;
 }
 
 @keyframes dialogFadeIn {

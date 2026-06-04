@@ -148,7 +148,8 @@ const KnowledgeRepositoryPage = {
             // 降级到模拟数据
             clearInterval(textTimer);
             document.getElementById('materials-loading').style.display = 'none';
-            const mockData = DataMock.getSampleMaterials(this._courseId);
+            const topic = this._course?.title || this._course?.query || '';
+            const mockData = DataMock.getSampleMaterials(this._courseId, topic);
             this._materialData = mockData;
             
             const container = document.getElementById('materials-container');

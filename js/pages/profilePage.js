@@ -117,7 +117,9 @@ const ProfilePage = {
                             <div id="modal-sort-select-container" style="min-width:160px;"></div>
                         </div>
                     </div>
-                    <div id="modal-course-list-content"></div>
+                    <div class="course-list-scroll">
+                        <div id="modal-course-list-content"></div>
+                    </div>
                 `;
                 
                 const courseListContent = document.getElementById('modal-course-list-content');

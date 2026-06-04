@@ -228,7 +228,8 @@ const LearningPage = {
             // 降级到模拟数据
             const materialBody = document.getElementById('materials-body');
             if (materialBody) {
-                const mockData = DataMock.getSampleMaterials(this._courseId);
+                const topic = this._course?.title || this._course?.query || '';
+                const mockData = DataMock.getSampleMaterials(this._courseId, topic);
                 MaterialList.render(materialBody, mockData);
             }
         }
